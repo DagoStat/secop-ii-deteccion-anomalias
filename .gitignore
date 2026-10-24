@@ -1,0 +1,63 @@
+# ============================================================================
+# .gitignore — SECOP II V16.2
+# ============================================================================
+
+# Datos (no se versionan: se descargan desde el API SECOP II)
+07_data/raw/
+07_data/*.csv
+07_data/*.parquet
+07_data/*.json
+07_data/*.zip
+*.bak
+
+# Checkpoints del extractor Python (regenerables)
+01_pipeline/checkpoint.json
+01_pipeline/*.log
+
+# Binarios de Power BI generados (regenerables desde 03_powerbi/GUIA_POWERBI.md)
+03_powerbi/*.pbix
+
+# Archivos temporales de Office
+~$*
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs de SQL Server (regenerables)
+*.log
+*.trace
+
+# ============================================================================
+# Credenciales y secretos  (NUNCA versionar)
+# ============================================================================
+.env
+.env.*
+!.env.ejemplo
+*.pem
+*.key
+*.pfx
+secrets/
+credenciales*

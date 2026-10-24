@@ -1,0 +1,69 @@
+MIT License con cláusula adicional sobre presunción de inocencia
+
+Copyright (c) 2026 John Dagoberto Moyano Duarte
+Universidad Antonio Nariño - Especialización en Gobierno de Datos
+
+================================================================================
+LICENCIA MIT
+================================================================================
+
+Por la presente se concede permiso, libre de cargos, a cualquier persona que
+obtenga una copia de este software y de los archivos de documentación asociados
+(el "Software"), para utilizar el Software sin restricción, incluyendo sin
+limitación los derechos a usar, copiar, modificar, fusionar, publicar,
+distribuir, sublicenciar, y/o vender copias del Software, y a permitir a las
+personas a las que se les proporcione el Software a hacer lo mismo, sujeto a
+las siguientes condiciones:
+
+El aviso de copyright anterior y este aviso de permiso se incluirán en todas
+las copias o partes sustanciales del Software.
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN,
+IDONEIDAD PARA UN PROPÓSITO PARTICULAR E INCUMPLIMIENTO. EN NINGÚN CASO LOS
+AUTORES O TITULARES DEL COPYRIGHT SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN,
+DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O
+CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE
+O EL USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
+
+================================================================================
+CLÁUSULA ADICIONAL — PRESUNCIÓN DE INOCENCIA
+================================================================================
+
+Este Software identifica posibles anomalías estadísticas en procesos de
+contratación pública con el propósito de orientar la atención de auditores,
+veedurías y organismos de control hacia procesos que requieren revisión
+prioritaria. El Software NO emite juicios de culpabilidad ni constituye
+evidencia de irregularidad o corrupción.
+
+El uso de este Software se sujeta a:
+
+1. El Artículo 29 de la Constitución Política de Colombia, que consagra el
+   debido proceso y la presunción de inocencia: "Toda persona se presume
+   inocente mientras no se la haya declarado judicialmente culpable."
+
+2. La Ley 1581 de 2012 de Protección de Datos Personales: las identidades
+   de personas naturales (nombres, documentos, ubicaciones de proveedores
+   y funcionarios adjudicadores) reciben protección mediante Dynamic Data
+   Masking y Row-Level Security según el rol del usuario consultor.
+
+3. La Ley 1712 de 2014 de Transparencia y Acceso a Información Pública:
+   los montos contratados, las entidades públicas y la información agregada
+   son de naturaleza pública y se publican conforme a sus principios.
+
+4. La Ley 1266 de 2008 sobre hábeas data y manejo de información financiera
+   y crediticia, aplicada al tratamiento del campo del funcionario
+   adjudicador con nivel de sensibilidad CONFIDENCIAL.
+
+Cualquier persona o entidad mencionada en una alerta del índice de riesgo
+generado por este Software conserva intacto su derecho fundamental a la
+presunción de inocencia. Las verificaciones materiales y los juicios
+correspondientes son competencia exclusiva de las autoridades constitucional
+y legalmente facultadas: Contraloría General de la República, Procuraduría
+General de la Nación, Fiscalía General de la Nación, Auditoría General de la
+República, contralorías territoriales y veedurías ciudadanas según
+corresponda.
+
+El autor del Software declina expresamente cualquier responsabilidad por el
+uso indebido del Software para fines distintos a la orientación de
+auditorías legítimas o la investigación académica.

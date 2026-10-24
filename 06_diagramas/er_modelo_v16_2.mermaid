@@ -1,0 +1,239 @@
+erDiagram
+
+    staging_secop_ii_procesos ||--o{ dwh_fact_contratacion : "ETL deduplica por id"
+
+    dwh_fact_contratacion }o--|| dwh_dim_entidad     : "sk_entidad"
+    dwh_fact_contratacion }o--|| dwh_dim_proveedor   : "sk_proveedor"
+    dwh_fact_contratacion }o--|| dwh_dim_modalidad   : "sk_modalidad"
+    dwh_fact_contratacion }o--|| dwh_dim_tiempo      : "sk_t_publicacion"
+    dwh_fact_contratacion }o--|| dwh_dim_tiempo      : "sk_t_adjudicacion"
+
+    dwh_fact_contratacion ||--o{ ind_alertas_proceso   : "7 vistas ANOM V16.2"
+    dwh_fact_contratacion ||--o| ind_riesgo_corrupcion : "1 fila por proceso con alerta"
+    ind_alertas_proceso   }o--|| ind_riesgo_corrupcion : "GROUP BY id_proceso SUM puntos"
+
+    ind_riesgo_corrupcion ||--o{ pbi_agg_riesgo_x_modalidad_anio       : "por modalidad-anio"
+    ind_riesgo_corrupcion ||--o{ pbi_agg_riesgo_x_entidad_anio         : "por entidad-anio"
+    ind_riesgo_corrupcion ||--o{ pbi_agg_riesgo_x_departamento_anio    : "por departamento-anio"
+    ind_alertas_proceso   ||--o{ pbi_agg_alertas_x_indicador_anio      : "por indicador-anio"
+    ind_riesgo_corrupcion ||--o{ pbi_agg_top_proveedores_riesgo        : "ranking global"
+
+    dwh_fact_contratacion       ||..o{ meta_calidad_dimensiones        : "21 metricas DAMA 18 21 cumplen"
+    dwh_dim_proveedor           ||..o{ meta_clasificacion_sensibilidad : "DDM aplicado"
+    staging_secop_ii_procesos   ||..o{ meta_clasificacion_sensibilidad : "DDM aplicado"
+    meta_backups                ||..o{ meta_audit_seguridad             : ""
+    meta_clasificacion_sensibilidad ||..o{ meta_audit_seguridad         : "DDL eventos"
+
+    sec_pol_riesgo_por_rol  ||--|| ind_riesgo_corrupcion  : "FILTER PREDICATE"
+    sec_fn_filtro_riesgo    ||--|| sec_pol_riesgo_por_rol : "usa funcion"
+
+    staging_secop_ii_procesos {
+        string id_del_proceso        PK
+        string nit_entidad           "FK logica"
+        string entidad               "PUBLICO"
+        string nit_del_proveedor_adjudicado "DDM RESTRINGIDO"
+        string nombre_del_proveedor  "DDM RESTRINGIDO"
+        string nombre_del_adjudicador "DDM CONFIDENCIAL"
+        date   fecha_de_publicacion_del
+        datetime fecha_adjudicacion
+        decimal precio_base
+        decimal valor_total_adjudicacion
+        int    conteo_de_respuestas_a_ofertas
+        string estado_del_procedimiento
+        datetime fecha_ingesta
+    }
+
+    dwh_dim_entidad {
+        int    sk_entidad            PK
+        string nit                   UK
+        string nombre                "PUBLICO Ley 1712"
+        string orden                 "Nacional Territorial etc"
+        string departamento
+        string ciudad
+    }
+
+    dwh_dim_proveedor {
+        int    sk_proveedor          PK
+        string documento             UK "DDM RESTRINGIDO Ley 1581 - es el NIT"
+        string tipo_doc              "NIT CC CE etc"
+        string nombre                "DDM RESTRINGIDO Ley 1581"
+    }
+
+    dwh_dim_modalidad {
+        int    sk_modalidad          PK
+        string nombre                UK
+        bit    es_competitiva        "Usado por ANOM-003"
+    }
+
+    dwh_dim_tiempo {
+        int    sk_tiempo             PK
+        date   fecha                 UK
+        int    anio
+        int    trimestre
+        int    mes
+        string nombre_mes
+        int    dia
+        int    dia_semana
+    }
+
+    dwh_fact_contratacion {
+        bigint sk_proceso            PK
+        string id_proceso            UK
+        int    sk_entidad            FK
+        int    sk_proveedor          FK
+        int    sk_modalidad          FK
+        int    sk_t_publicacion      FK
+        int    sk_t_adjudicacion     FK
+        decimal valor_adjudicado     "PUBLICO ANOM-001 002 007 008 009"
+        decimal precio_base          "PUBLICO ANOM-001"
+        int    n_oferentes           "ANOM-003"
+        string estado
+    }
+
+    ind_alertas_proceso {
+        bigint sk_alerta             PK
+        string id_proceso            FK
+        int    sk_entidad            FK
+        int    sk_proveedor          FK
+        int    sk_modalidad          FK
+        int    sk_t_publicacion      FK
+        int    sk_t_adjudicacion     FK
+        string codigo_anomalia       "ANOM-001 002 003 005 007 008 009 V16.2"
+        int    puntos                "2 o 3 segun severidad"
+        string descripcion           "INTERNO Art 29 CP"
+    }
+
+    ind_riesgo_corrupcion {
+        bigint sk_riesgo             PK
+        string id_proceso            UK
+        int    sk_entidad            FK
+        int    sk_proveedor          FK
+        int    sk_modalidad          FK
+        int    sk_t_publicacion      FK
+        int    sk_t_adjudicacion     FK
+        int    n_alertas
+        int    puntos_totales        "RLS 0 a 17 V16.2"
+        string nivel_riesgo          "RLS SIN RIESGO BAJO 1-3 MEDIO 4-9 ALTO mayor igual 10"
+    }
+
+    pbi_agg_riesgo_x_modalidad_anio {
+        string modalidad             PK
+        bit    es_competitiva
+        int    anio                  PK
+        bigint total_procesos
+        bigint procesos_con_alerta
+        bigint procesos_bajo
+        bigint procesos_medio
+        bigint procesos_alto
+        decimal valor_adjudicado_total
+        decimal valor_en_riesgo_medio_alto
+    }
+
+    pbi_agg_riesgo_x_entidad_anio {
+        int    sk_entidad            PK
+        string nit
+        string entidad
+        string departamento
+        string orden
+        int    anio                  PK
+        bigint total_procesos
+        bigint procesos_con_alerta
+        bigint procesos_alto
+        bigint procesos_medio
+        bigint procesos_bajo
+    }
+
+    pbi_agg_riesgo_x_departamento_anio {
+        string departamento          PK
+        int    anio                  PK
+        bigint total_procesos
+        bigint entidades_distintas
+        bigint procesos_alto
+        bigint procesos_medio
+        bigint procesos_bajo
+    }
+
+    pbi_agg_alertas_x_indicador_anio {
+        string codigo_anomalia       PK
+        int    puntos_indicador
+        int    anio                  PK
+        bigint n_alertas
+        bigint procesos_distintos
+        decimal valor_adjudicado_en_alertas
+    }
+
+    pbi_agg_top_proveedores_riesgo {
+        int    sk_proveedor          PK
+        string documento
+        string proveedor             "DDM aplicado"
+        bigint procesos_con_alerta
+        bigint procesos_alto
+        bigint procesos_medio
+        bigint procesos_bajo
+        bigint puntos_acumulados
+        decimal promedio_puntos
+        decimal valor_adjudicado_total
+        bigint entidades_distintas_contratantes
+    }
+
+    meta_calidad_dimensiones {
+        bigint sk_medicion           PK
+        datetime fecha_medicion
+        string dimension             "7 dimensiones DAMA"
+        string metrica
+        bigint universo_evaluado
+        bigint casos_con_problema
+        decimal pct_cumplimiento
+        decimal pct_objetivo
+        bit    cumple
+        string severidad
+        string descripcion
+    }
+
+    meta_backups {
+        int    sk_backup             PK
+        datetime fecha_backup
+        string tipo
+        string nombre_bd
+        string ruta_archivo
+        decimal tamano_mb
+        int    duracion_seg
+        decimal ratio_compresion
+        bit    checksum_ok
+        bit    verify_ok
+        string notas
+    }
+
+    meta_clasificacion_sensibilidad {
+        int    sk_clasif             PK
+        string schema_objeto         UK
+        string nombre_objeto         UK
+        string nombre_columna        UK
+        string nivel_sensibilidad    "PUBLICO INTERNO RESTRINGIDO CONFIDENCIAL"
+        string base_legal
+        bit    identifica_persona
+        bit    requiere_mascara
+        string tipo_mascara
+        datetime fecha_clasificacion
+    }
+
+    meta_audit_seguridad {
+        int    sk                    PK
+        datetime fecha
+        string accion
+        string objeto
+        string detalle
+        string ejecutor
+    }
+
+    sec_fn_filtro_riesgo {
+        string nivel_riesgo          PK
+        bit    resultado
+    }
+
+    sec_pol_riesgo_por_rol {
+        string nombre_politica       PK
+        bit    is_enabled
+        string objeto_protegido
+        string predicado
+    }

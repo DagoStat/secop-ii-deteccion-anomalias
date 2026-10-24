@@ -1,0 +1,5 @@
+sodapy==2.2.0
+pyodbc==5.1.0
+pandas==2.2.2
+tenacity==8.3.0
+python-dotenv==1.0.1
