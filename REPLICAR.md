@@ -305,8 +305,8 @@ Si solo necesitas verificar el dashboard sin re-ejecutar el pipeline (porque ya 
 
 ## Recursos adicionales
 
-- Documento de tesis completo: `04_documento/VF_documento_final_V16_2.docx`
-- Presentación de defensa: `05_presentacion/Defensa_VF_V16_2.pptx`
+- Documento de tesis completo: `04_documento/Moyano-2026-trabajo-de-grado-SECOP-II.docx`
+- Presentación de defensa: `05_presentacion/Moyano-2026-sustentacion-SECOP-II.pptx`
 - Diagrama de arquitectura: `06_diagramas/arquitectura.md`
 - Modelo entidad-relación: `06_diagramas/er_modelo_v16_2.md`
 
